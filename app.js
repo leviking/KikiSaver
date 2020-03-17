@@ -18,6 +18,8 @@ const getLoginQuery = (username, password) => {
 }
 
 app.get('/', (req, res) => res.send('Hello world!'))
+
+//Login stuff
 app.get('/login', sendLogin)
 app.post('/login', (req, res) => {
     con.query(getLoginQuery(req.body.username, req.body.password), (err, results, fields) => {
@@ -34,20 +36,19 @@ app.post('/login', (req, res) => {
             }
         } )
 })
+
+//Sign up stuff
 app.get('/signup', sendSignup)
+app.post('/signup', (req, res) => {
+    con.query(`insert into users(username, password, created_at) values ('${req.body.username}', '${req.body.password}', now())`, function(error, results, fields) {
+        if (error) {
+            res.status(400).send(`${JSON.stringify(error)}.`);
+            return;
+        };
+        if (results) res.redirect('/');
+    })
+})
 
+
+//LISTEN
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
-
-
-// const auth = con.query(queryString, (err, results, fields) => {
-//     if (err) {
-//         console.log(err)
-//     } else if (!results) {
-//         // username and password do not match!
-//         res.send('no results')
-//     } else {
-//         console.log(results)
-//         res.send('hooray you have results')
-//         // user is logged in
-//     }
-// })
