@@ -9,7 +9,11 @@ const con = mysql.createConnection({
     password: process.env.DB_PASS,
     database: 'kiki_saver'
 })
+const sendLogin = (req, res) => res.sendFile(__dirname + '/public/login.html')
+const sendSignup = (req, res) => res.sendFile(__dirname + '/public/signup.html')
 
 app.get('/', (req, res) => res.send('Hello world!'))
+app.get('/login', sendLogin)
+app.get('/signup', sendSignup)
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
