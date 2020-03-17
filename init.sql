@@ -7,18 +7,18 @@ grant all PRIVILEGES on *.* to 'admin'@'localhost';
 use kiki_saver;
 
 create table users (
-    id tinyint auto_increment,
+    id int auto_increment,
     username varchar(20),
-    password varhar(20),
+    password varchar(20),
     first_name varchar(20),
     last_name varchar(30),
     phone varchar(10),
     created_at datetime,
     deleted_at datetime,
     constraint user_id primary key (id),
-    constraint username unique(username),
-    constraint email unique(email)
+    constraint username unique(username)
 );
+
 create table attendance(
     id int auto_increment,
     user_id int,
@@ -27,5 +27,6 @@ create table attendance(
     gps int,
     selfie_url varchar(240),
     ip int,
+    constraint id primary key (id),
     constraint foreign key(user_id) references users(id)
 );
