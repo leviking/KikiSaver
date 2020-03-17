@@ -12,6 +12,19 @@ const con = mysql.createConnection({
 const sendLogin = (req, res) => res.sendFile(__dirname + '/public/login.html')
 const sendSignup = (req, res) => res.sendFile(__dirname + '/public/signup.html')
 
+const logIn = () => {
+    const queryString = `SELECT user_id FROM users WHERE username=${username} AND password=${password}`
+    con.query(queryString), (err, results, fields) => {
+        if (err) {
+            console.log(err)
+        } else if (!results) {
+            // username and password do not match!
+        } else {
+            // user is logged in
+        }
+    }
+}
+
 app.get('/', (req, res) => res.send('Hello world!'))
 app.get('/login', sendLogin)
 app.get('/signup', sendSignup)
