@@ -11,7 +11,7 @@ const con = mysql.createConnection({
     database: 'kiki_saver'
 })
 
-app.get('/', (req, res) => res.send('Hello world!'))
+app.get('/', (req, res) => res.sendFile(__dirname + '/public/index.html'));
 
 //Login stuff
 const sendLogin = (req, res) => res.sendFile(__dirname + '/public/login.html')
