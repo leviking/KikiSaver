@@ -17,6 +17,10 @@ const getLoginQuery = (username, password) => {
     return `SELECT id FROM users WHERE username='${username}' AND password='${password}'`  
 }
 
+const logAttendance = (id) => {
+    return `insert into attendance (user_id, created_at) values ('${id}', now())`
+}
+
 app.get('/', (req, res) => res.send('Hello world!'))
 
 //Login stuff
@@ -30,8 +34,13 @@ app.post('/login', (req, res) => {
                 console.log(results)
                 res.send('no results')
             } else {
-                console.log(results)
-                res.send('hooray you have results')
+                con.query(logAttendance(results[0].id), (err, results, fields) => {
+                    if (err) {
+                        console.log(err)
+                    } else {
+                        res.send('You\'re attendance has been logged!')
+                    }
+                })
                 // user is logged in
             }
         } )
