@@ -10,22 +10,26 @@ const con = mysql.createConnection({
     password: process.env.DB_PASS,
     database: 'kiki_saver'
 })
-const sendLogin = (req, res) => res.sendFile(__dirname + '/public/login.html')
-const sendSignup = (req, res) => res.sendFile(__dirname + '/public/signup.html')
-
-const getLoginQuery = (username, password) => {
-    return `SELECT id FROM users WHERE username='${username}' AND password='${password}'`  
-}
-
-const logAttendance = (id, ip) => {
-    return `insert into attendance (user_id, created_at, gps, ip) values ('${id}', now(), 0, '${ip}')`
-}
 
 app.get('/', (req, res) => res.send('Hello world!'))
 
 //Login stuff
-app.get('/login', sendLogin)
-app.post('/login', (req, res) => {
+const sendLogin = (req, res) => res.sendFile(__dirname + '/public/login.html')
+const getLoginQuery = (username, password) => {
+    return `SELECT id FROM users WHERE username='${username}' AND password='${password}'`  
+}
+const getAttendanceQuery = (id, ip) => {
+    return `insert into attendance (user_id, created_at, gps, ip) values ('${id}', now(), 0, '${ip}')`
+}
+const logAttendance = (id, ip) => con.query(getAttendanceQuery(id, ip), (err, results, fields) => {
+    if (err) {
+        console.log(err)
+    } else {
+        res.send('You\'re attendance has been logged!')
+    }
+})
+
+const login = (req, res) => {
     con.query(getLoginQuery(req.body.username, req.body.password), (err, results, fields) => {
             if (err) {
                 console.log(err)
@@ -34,29 +38,30 @@ app.post('/login', (req, res) => {
                 console.log(results)
                 res.send('no results')
             } else {
-                con.query(logAttendance(results[0].id, req.ip), (err, results, fields) => {
-                    if (err) {
-                        console.log(err)
-                    } else {
-                        res.send('You\'re attendance has been logged!')
-                    }
-                })
+                logAttendance(results[0].id, req.ip)
                 // user is logged in
             }
-        } )
-})
+        })
+    }
+
+app.get('/login', sendLogin)
+app.post('/login', login)
 
 //Sign up stuff
-app.get('/signup', sendSignup)
-app.post('/signup', (req, res) => {
-    con.query(`insert into users(username, password, created_at) values ('${req.body.username}', '${req.body.password}', now())`, function(error, results, fields) {
+const sendSignup = (req, res) => res.sendFile(__dirname + '/public/signup.html')
+const getSignupQuery = (username, password) => `insert into users(username, password, created_at) values ('${username}', '${password}', now())`
+const createUser = (req, res) => {
+    con.query(getSignupQuery(req.body.username, req.body.password), function(error, results, fields) {
         if (error) {
             res.status(400).send(`${JSON.stringify(error)}.`);
             return;
         };
         if (results) res.redirect('/');
     })
-})
+}
+
+app.get('/signup', sendSignup)
+app.post('/signup', createUser)
 
 
 //LISTEN
