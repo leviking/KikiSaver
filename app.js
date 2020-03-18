@@ -10,6 +10,9 @@ const con = mysql.createConnection({
     password: process.env.DB_PASS,
     database: 'kiki_saver'
 })
+const sendLogin = (req, res) => res.sendFile(__dirname + '/public/login.html')
+const sendSignup = (req, res) => res.sendFile(__dirname + '/public/signup.html')
+const sendAdmin = (req, res) => res.sendFile(__dirname + '/public/admin.html')
 
 app.get('/', (req, res) => res.sendFile(__dirname + '/public/index.html'));
 
@@ -62,6 +65,9 @@ const createUser = (req, res) => {
 
 app.get('/signup', sendSignup)
 app.post('/signup', createUser)
+
+//Admin stuff
+app.get('/admin', sendAdmin)
 
 
 //LISTEN
