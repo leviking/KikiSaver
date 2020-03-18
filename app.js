@@ -17,8 +17,8 @@ const getLoginQuery = (username, password) => {
     return `SELECT id FROM users WHERE username='${username}' AND password='${password}'`  
 }
 
-const logAttendance = (id) => {
-    return `insert into attendance (user_id, created_at) values ('${id}', now())`
+const logAttendance = (id, ip) => {
+    return `insert into attendance (user_id, created_at, gps, ip) values ('${id}', now(), 0, '${ip}')`
 }
 
 app.get('/', (req, res) => res.send('Hello world!'))
@@ -34,7 +34,7 @@ app.post('/login', (req, res) => {
                 console.log(results)
                 res.send('no results')
             } else {
-                con.query(logAttendance(results[0].id), (err, results, fields) => {
+                con.query(logAttendance(results[0].id, req.ip), (err, results, fields) => {
                     if (err) {
                         console.log(err)
                     } else {

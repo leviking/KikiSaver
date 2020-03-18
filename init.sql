@@ -26,7 +26,7 @@ create table attendance(
     deleted_at datetime,
     gps int,
     selfie_url varchar(240),
-    ip int,
+    ip varchar(40),
     constraint id primary key (id),
     constraint foreign key(user_id) references users(id)
 );
