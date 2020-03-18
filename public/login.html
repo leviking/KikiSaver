@@ -1,8 +1,10 @@
 <html>
-  <head>
+
+<head>
     <title>KikiSaver</title>
-  </head>
-  <body>
+</head>
+
+<body>
     <h1>Login</h1>
     <form action="/login" method="post" id="login">
         <div>
@@ -14,8 +16,20 @@
             <input type="password" name="password" id="password" required>
         </div>
         <div>
+            <input type="hidden" name="gps">
             <input type="submit" value="Submit">
         </div>
     </form>
-  </body>
+    <script>
+        window.onload = (event) => {
+            let gps = document.querySelector('input[name="gps"]');
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    gps.value = `${position.coords.latitude}, ${position.coords.longitude}`;
+                });
+            }
+        };
+    </script>
+</body>
+
 </html>
