@@ -1,6 +1,6 @@
 #Requirements
 
-1. MSCoding not have to take roll
+1. ~MSCoding not have to take roll~
 2. Fairly robust to cheating
 3. Class learns about full stack development
 4. Send device GPS and IP
