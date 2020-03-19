@@ -15,6 +15,7 @@ create table users (
     phone varchar(10),
     created_at datetime,
     deleted_at datetime,
+    is_admin boolean,
     constraint user_id primary key (id),
     constraint username unique(username)
 );
