@@ -10,9 +10,6 @@ const con = mysql.createConnection({
     password: process.env.DB_PASS,
     database: 'kiki_saver'
 })
-const sendLogin = (req, res) => res.sendFile(__dirname + '/public/login.html')
-const sendSignup = (req, res) => res.sendFile(__dirname + '/public/signup.html')
-const sendAdmin = (req, res) => res.sendFile(__dirname + '/public/admin.html')
 
 app.get('/', (req, res) => res.sendFile(__dirname + '/public/index.html'));
 
@@ -28,7 +25,7 @@ const logAttendance = (id, ip) => con.query(getAttendanceQuery(id, ip), (err, re
     if (err) {
         console.log(err)
     } else {
-        res.send('You\'re attendance has been logged!')
+        return true;
     }
 })
 
@@ -41,7 +38,7 @@ const login = (req, res) => {
                 console.log(results)
                 res.send('no results')
             } else {
-                logAttendance(results[0].id, req.ip)
+                if(logAttendance(results[0].id, req.ip)) res.send('You\'re attendance has been logged!')
                 // user is logged in
             }
         })
@@ -67,6 +64,23 @@ app.get('/signup', sendSignup)
 app.post('/signup', createUser)
 
 //Admin stuff
+const sendAdmin = (req, res) => {
+    
+    if(isAdmin()) {
+        res.sendFile(__dirname + '/public/admin.html')
+    } else {
+        res.redirect('/')
+    }
+}
+
+const isAdmin = (user_id) => {
+    con.query(`select id from users where is_admin and id=${user_id}`), (error, results, fields) => {
+        if (error || !results.length) return false;
+        return true;  
+    }
+
+}
+
 app.get('/admin', sendAdmin)
 
 
