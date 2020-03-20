@@ -2,8 +2,9 @@ const express = require('express')
 const mysql = require('mysql')
 const app = express()
 const port = 3000
+app.use(express.static('public'))
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 const con = mysql.createConnection({
     host: 'localhost',
     user: process.env.DB_USER,
@@ -16,7 +17,7 @@ app.get('/', (req, res) => res.sendFile(__dirname + '/public/index.html'));
 //Login stuff
 const sendLogin = (req, res) => res.sendFile(__dirname + '/public/login.html')
 const getLoginQuery = (username, password) => {
-    return `SELECT id FROM users WHERE username='${username}' AND password='${password}'`  
+    return `SELECT id FROM users WHERE username='${username}' AND password='${password}'`
 }
 const getAttendanceQuery = (id, ip) => {
     return `insert into attendance (user_id, created_at, gps, ip) values ('${id}', now(), 0, '${ip}')`
@@ -31,18 +32,18 @@ const logAttendance = (id, ip) => con.query(getAttendanceQuery(id, ip), (err, re
 
 const login = (req, res) => {
     con.query(getLoginQuery(req.body.username, req.body.password), (err, results, fields) => {
-            if (err) {
-                console.log(err)
-            } else if (!results.length) {
-                // username and password do not match!
-                console.log(results)
-                res.send('no results')
-            } else {
-                if(logAttendance(results[0].id, req.ip)) res.sendFile(__dirname + '/public/success.html')
+        if (err) {
+            console.log(err)
+        } else if (!results.length) {
+            // username and password do not match!
+            console.log(results)
+            res.send('no results')
+        } else {
+            if (logAttendance(results[0].id, req.ip)) res.sendFile(__dirname + '/public/success.html')
                 // user is logged in
-            }
-        })
-    }
+        }
+    })
+}
 
 app.get('/login', sendLogin)
 app.post('/login', login)
@@ -65,8 +66,8 @@ app.post('/signup', createUser)
 
 //Admin stuff
 const sendAdmin = (req, res) => {
-    
-    if(isAdmin()) {
+
+    if (isAdmin()) {
         res.sendFile(__dirname + '/public/admin.html')
     } else {
         res.redirect('/')
@@ -76,13 +77,13 @@ const sendAdmin = (req, res) => {
 const isAdmin = (user_id) => {
     con.query(`select id from users where is_admin and id=${user_id}`), (error, results, fields) => {
         if (error || !results.length) return false;
-        return true;  
+        return true;
     }
 
 }
 
 app.get('/admin', sendAdmin)
 
-
-//LISTEN
+app.get('*', (req, res) => res.status(404).sendFile(__dirname + '/public/404.html'))
+    //LISTEN
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
