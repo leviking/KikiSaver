@@ -38,7 +38,7 @@ const login = (req, res) => {
                 console.log(results)
                 res.send('no results')
             } else {
-                if(logAttendance(results[0].id, req.ip)) res.send('You\'re attendance has been logged!')
+                if(logAttendance(results[0].id, req.ip)) res.sendFile(__dirname + '/public/success.html')
                 // user is logged in
             }
         })
