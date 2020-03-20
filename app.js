@@ -2,6 +2,7 @@ const express = require('express')
 const mysql = require('mysql')
 const app = express()
 const port = 3000
+app.use(express.static('public'))
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 const con = mysql.createConnection({
@@ -69,6 +70,6 @@ app.post('/signup', createUser)
 //Admin stuff
 app.get('/admin', sendAdmin)
 
-
+app.get('*',(req,res)=>res.status(404).sendFile(__dirname + '/public/404.html'))
 //LISTEN
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
