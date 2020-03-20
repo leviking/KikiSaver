@@ -85,5 +85,13 @@ const isAdmin = (user_id) => {
 app.get('/admin', sendAdmin)
 
 app.get('*', (req, res) => res.status(404).sendFile(__dirname + '/public/404.html'))
-    //LISTEN
+
+//logout stuff
+
+const sendIndex = (req, res) => {res.redirect('/')} 
+
+app.get('/logout', sendIndex)
+
+
+//LISTEN
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
