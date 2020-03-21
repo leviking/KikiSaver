@@ -12,7 +12,10 @@ const con = mysql.createConnection({
     database: 'kiki_saver'
 })
 
+// Splash stuff
 app.get('/', (req, res) => res.sendFile(__dirname + '/public/index.html'));
+app.get('/src/css/style.css', (req, res) => { res.sendFile(__dirname + '/src/css/style.css') })
+
 
 //Login stuff
 const sendLogin = (req, res) => res.sendFile(__dirname + '/public/login.html')
