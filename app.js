@@ -12,7 +12,10 @@ const con = mysql.createConnection({
     database: 'kiki_saver'
 })
 
+// Splash stuff
 app.get('/', (req, res) => res.sendFile(__dirname + '/public/index.html'));
+app.get('/src/css/style.css', (req, res) => { res.sendFile(__dirname + '/src/css/style.css') })
+
 
 //Login stuff
 const sendLogin = (req, res) => res.sendFile(__dirname + '/public/login.html')
@@ -84,14 +87,13 @@ const isAdmin = (user_id) => {
 
 app.get('/admin', sendAdmin)
 
-app.get('*', (req, res) => res.status(404).sendFile(__dirname + '/public/404.html'))
-
 //logout stuff
-
 const sendIndex = (req, res) => {res.redirect('/')} 
 
 app.get('/logout', sendIndex)
 
+// 404 Not found stuff
+app.get('*', (req, res) => res.status(404).sendFile(__dirname + '/public/404.html'))
 
 //LISTEN
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
