@@ -68,24 +68,30 @@ app.get('/signup', sendSignup)
 app.post('/signup', createUser)
 
 //Admin stuff
-const sendAdmin = (req, res) => {
 
-    if (isAdmin()) {
+
+const sendAdmin = (req, res) => {
+    
+    if(isAdmin(req.params.id)) {
         res.sendFile(__dirname + '/public/admin.html')
     } else {
         res.redirect('/')
     }
 }
 
-const isAdmin = (user_id) => {
-    con.query(`select id from users where is_admin and id=${user_id}`), (error, results, fields) => {
-        if (error || !results.length) return false;
-        return true;
-    }
-
+const isAdmin = async (user_id) => {
+    let result
+    await con.query(`select id from users where is_admin and id='${user_id}'`, (error, results, fields) => {
+        if (error) {
+            console.log(error)
+        } else {
+            result = results[0].id
+        }
+    }) 
+    return result
 }
 
-app.get('/admin', sendAdmin)
+app.get('/admin/:id', sendAdmin)
 
 //logout stuff
 const sendIndex = (req, res) => {res.redirect('/')} 
