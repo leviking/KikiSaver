@@ -4,30 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">    
-    <title>KikiSaver</title>
+    <title>KikiSaver Login</title>
+    <link rel="stylesheet" href="../src/css/style.css">
 </head>
-
 <body>
-    <h1>Login</h1>
-    <form action="/login" method="post" id="login">
-        <div>
-            <label for="username">Username:</label>
-            <input type="text" name="username" required>
-        </div>
-        <div>
-            <label for="password">Password:</label>
-            <input type="password" name="password" id="password" required>
-        </div>
-        <div>
-            <label for="image">Selfie:</label>
-            <input type="file" name="selfie" id="selfie" accept="image/png image/jpeg" required>
-        </div>
-        <div>
-            <input type="hidden" name="gps">
-            <input type="submit" value="Submit">
-        </div>
-    </form>
-    <p>Don't have an account? <a href="/signup"> Sign up!</a></p>
+    <main id="container">
+        <h1>Login</h1>
+        <form action="/login" method="post" id="login">
+            <div>
+                <label for="username">Username:</label>
+                <input type="text" name="username" required>
+            </div>
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" name="password" id="password" required>
+            </div>
+            <div>
+                <label for="image">Selfie:</label>
+                <input type="file" name="selfie" id="selfie" accept="image/png image/jpeg" required>
+            </div>
+            <div>
+                <input type="hidden" name="gps">
+                <input type="submit" value="Submit">
+            </div>
+        </form>
+        <p>Don't have an account? <a href="/signup"> Sign up!</a></p>
+    </main>
     <script>
         window.onload = (event) => {
             let gps = document.querySelector('input[name="gps"]');

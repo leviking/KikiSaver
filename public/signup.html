@@ -4,27 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>KikiSaver</title>
+    <title>KikiSaver Signup</title>
+    <link rel="stylesheet" href="../src/css/style.css">
   </head>
   <body>
-    <h1>Sign Up</h1>
-    <form action="/signup" method="post" id="signup">
-        <div>
-            <label for="username">Username:</label>
-            <input type="text" name="username" required>
-        </div>
-        <div>
-            <label for="password">Password:</label>
-            <input type="password" name="password" id="password" required>
-        </div>
-        <div>
-            <label for="password verifcation">Password again:</label>
-            <input type="password" name="password verification" id="passwordv" required>
-        </div>
-        <div>
-            <input type="submit" value="Submit">
-        </div>
-    </form>
-    <p>Already have an account? <a href="/login"> Sign in!</a></p>
+    <main id="container">
+      <h1>Sign Up</h1>
+      <form action="/signup" method="post" id="signup">
+          <div>
+              <label for="username">Username:</label>
+              <input type="text" name="username" required>
+          </div>
+          <div>
+              <label for="password">Password:</label>
+              <input type="password" name="password" id="password" required>
+          </div>
+          <div>
+              <label for="password verifcation">Password again:</label>
+              <input type="password" name="password verification" id="passwordv" required>
+          </div>
+          <div>
+              <input type="submit" value="Submit">
+          </div>
+      </form>
+      <p>Already have an account? <a href="/login"> Sign in!</a></p>
+    </main>
   </body>
 </html>

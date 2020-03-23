@@ -12,7 +12,10 @@ const con = mysql.createConnection({
     database: 'kiki_saver'
 })
 
+// Splash stuff
 app.get('/', (req, res) => res.sendFile(__dirname + '/public/index.html'));
+app.get('/src/css/style.css', (req, res) => { res.sendFile(__dirname + '/src/css/style.css') })
+
 
 //Login stuff
 const sendLogin = (req, res) => res.sendFile(__dirname + '/public/login.html')
@@ -65,33 +68,38 @@ app.get('/signup', sendSignup)
 app.post('/signup', createUser)
 
 //Admin stuff
-const sendAdmin = (req, res) => {
 
-    if (isAdmin()) {
+
+const sendAdmin = (req, res) => {
+    
+    if(isAdmin(req.params.id)) {
         res.sendFile(__dirname + '/public/admin.html')
     } else {
         res.redirect('/')
     }
 }
 
-const isAdmin = (user_id) => {
-    con.query(`select id from users where is_admin and id=${user_id}`), (error, results, fields) => {
-        if (error || !results.length) return false;
-        return true;
-    }
-
+const isAdmin = async (user_id) => {
+    let result
+    await con.query(`select id from users where is_admin and id='${user_id}'`, (error, results, fields) => {
+        if (error) {
+            console.log(error)
+        } else {
+            result = results[0].id
+        }
+    }) 
+    return result
 }
 
-app.get('/admin', sendAdmin)
-
-app.get('*', (req, res) => res.status(404).sendFile(__dirname + '/public/404.html'))
+app.get('/admin/:id', sendAdmin)
 
 //logout stuff
-
 const sendIndex = (req, res) => {res.redirect('/')} 
 
 app.get('/logout', sendIndex)
 
+// 404 Not found stuff
+app.get('*', (req, res) => res.status(404).sendFile(__dirname + '/public/404.html'))
 
 //LISTEN
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
