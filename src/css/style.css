@@ -6,6 +6,23 @@ body {
     color: #676869;
 }
 
+
+h1 {
+    color: #48A2B3;
+}
+
+input {
+    max-width: 300px;
+}
+
+input[type=file] {
+    color: black;
+    background: #F9F9F9;
+    border: solid 1px black;
+    border-radius: 2px;
+    max-width: 300px;
+}
+
 #container {
     margin: 0px auto;
     display: flex;
@@ -14,10 +31,14 @@ body {
     width: 75vw;
 }
 
-h1 {
-    color: #48A2B3;
+#selfie-jpeg{
+    height: 25vh;
+    display: none;;
 }
-
+#selfie-png{
+    width: 50%;
+    display: none;;
+}
 .alert {
     background: lightpink;
     border: 3px crimson solid;
@@ -36,6 +57,39 @@ h1 {
 }
 .alert h2 {
     margin-bottom: 0px;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+	align-items: center;
+}
+
+    .buttons a {
+        width: 250px;
+    }
+
+    a:-webkit-any-link {
+        text-decoration: none;
+    }
+
+
+.btn {
+    width: 250px;
+    background: #48A2B3;
+    padding: 3px;
+    margin: 10px;
+    color: white;
+    font: inherit;
+    font-family: 'Fira Code', 'Courier New', Courier, monospace;
+    text-decoration: none;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
 }
 
 .not-found {

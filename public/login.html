@@ -11,24 +11,25 @@
     <main id="container">
         <h1>Login</h1>
         <form action="/login" method="post" id="login">
-            <div>
+            <div class="col">
                 <label for="username">Username:</label>
-                <input type="text" name="username" required>
+                <input type="email" name="username" placeholder="Enter your email" required>
             </div>
-            <div>
+            <div class="col">
                 <label for="password">Password:</label>
-                <input type="password" name="password" id="password" required>
+                <input type="password" name="password" id="password" placeholder="Enter your password" required>
             </div>
-            <div>
+            <div class="col">
                 <label for="image">Selfie:</label>
-                <input type="file" name="selfie" id="selfie" accept="image/png image/jpeg" required>
+                <input type="file" name="selfie" id="selfie" accept="image/png image/jpeg" class="btn" required>
             </div>
             <div>
                 <input type="hidden" name="gps">
-                <input type="submit" value="Submit">
+                <input type="submit" value="Submit" class="btn">
             </div>
         </form>
-        <p>Don't have an account? <a href="/signup"> Sign up!</a><br><a href="#">Forgot your password?</a></p>
+        <p>Don't have an account?</p>
+        <a href="/signup"><button class="btn">Sign up!</button></a>
     </main>
     <script>
         window.onload = (event) => {
