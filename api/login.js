@@ -9,8 +9,8 @@ const getLoginQuery = (username, password) => {
 const getAttendanceQuery = (id, ip) => {
     return `insert into attendance (user_id, created_at, gps, ip) values ('${id}', now(), 0, '${ip}')`
 }
-const logAttendance = (id, ip) => {
-    con.query(getAttendanceQuery(id, ip), (err, results, fields) => {
+const logAttendance = async(id, ip) => {
+    await con.query(getAttendanceQuery(id, ip), (err, results, fields) => {
         if (err) {
             console.log(err)
         } else {
@@ -26,7 +26,8 @@ const login = (req, res) => {
             // username and password do not match!
             res.send('no results')
         } else {
-            if (logAttendance(results[0].id, req.ip)) res.sendFile(__dirname + '/public/success.html')
+            const logged = logAttendance(results[0].id, req.ip)
+            logged && res.sendFile(path.join(__dirname + '/../public/success.html'))
                 // user is logged in
         }
     })
