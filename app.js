@@ -26,7 +26,7 @@ app.post('/signup', createUser)
 
 const sendAdmin = (req, res) => {
 
-    if (isAdmin(req.params.id)) {
+    if (isAdmin) {
         res.sendFile(__dirname + '/public/admin.html')
     } else {
         res.redirect('/')
@@ -45,7 +45,7 @@ const isAdmin = async(user_id) => {
     return result
 }
 
-app.get('/admin/:id', sendAdmin)
+app.get('/admin', sendAdmin)
 
 //logout stuff
 const sendIndex = (req, res) => { res.redirect('/') }
