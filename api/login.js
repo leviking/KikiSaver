@@ -1,20 +1,23 @@
 const path = require('path')
 const { con } = require('./db')
-    //Login stuff
+const EventEmitter = require('events');
+const loginEmitter = new EventEmitter();
+
+//Login stuff
 const sendLogin = (req, res) => res.sendFile(path.join(__dirname + '/../public/login.html'))
 
 const getLoginQuery = (username, password) => {
-    return `SELECT id FROM users WHERE username='${username}' AND password='${password}'`
+    return `SELECT id, is_admin FROM users WHERE username='${username}' AND password='${password}'`
 }
 const getAttendanceQuery = (id, ip) => {
     return `insert into attendance (user_id, created_at, gps, ip) values ('${id}', now(), 0, '${ip}')`
 }
-const logAttendance = async(id, ip) => {
-    await con.query(getAttendanceQuery(id, ip), (err, results, fields) => {
+const logAttendance = (id, ip, res) => {
+    con.query(getAttendanceQuery(id, ip), (err, results, fields) => {
         if (err) {
             console.log(err)
         } else {
-            return true;
+            loginEmitter.emit('loginSuccess', res)
         }
     })
 }
@@ -26,11 +29,17 @@ const login = (req, res) => {
             // username and password do not match!
             res.send('no results')
         } else {
-            const logged = logAttendance(results[0].id, req.ip)
-            logged && res.sendFile(path.join(__dirname + '/../public/success.html'))
-                // user is logged in
+            (results[0].is_admin == true) ? loginEmitter.emit('onAdmin', res): loginEmitter.emit('onLogin', results[0].id, req.ip, res);
         }
     })
 }
 
+loginEmitter.on('onLogin', logAttendance)
+loginEmitter.on('onAdmin', (res) => {
+    //add auth
+    res.sendFile(path.join(__dirname + '/../public/admin.html'))
+})
+loginEmitter.on('loginSuccess', (res) => {
+    res.sendFile(path.join(__dirname + '/../public/success.html'))
+})
 module.exports = { login, sendLogin }
