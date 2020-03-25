@@ -9,11 +9,11 @@ const sendLogin = (req, res) => res.sendFile(path.join(__dirname + '/../public/l
 const getLoginQuery = (username, password) => {
     return `SELECT id, is_admin FROM users WHERE username='${username}' AND password='${password}'`
 }
-const getAttendanceQuery = (id, ip) => {
-    return `insert into attendance (user_id, created_at, gps, ip) values ('${id}', now(), 0, '${ip}')`
+const getAttendanceQuery = (id, ip, gps) => {
+    return `insert into attendance (user_id, created_at, gps, ip) values ('${id}', now(), '${gps}', '${ip}')`
 }
-const logAttendance = (id, ip, res) => {
-    con.query(getAttendanceQuery(id, ip), (err, results, fields) => {
+const logAttendance = (id, ip, gps, res) => {
+    con.query(getAttendanceQuery(id, ip, gps), (err, results, fields) => {
         if (err) {
             console.log(err)
         } else {
@@ -29,7 +29,9 @@ const login = (req, res) => {
             // username and password do not match!
             res.send('no results')
         } else {
-            (results[0].is_admin == true) ? loginEmitter.emit('onAdmin', res): loginEmitter.emit('onLogin', results[0].id, req.ip, res);
+            (results[0].is_admin == true) ?
+                loginEmitter.emit('onAdmin', res):
+                loginEmitter.emit('onLogin', results[0].id, req.ip, req.body.gps, res);
         }
     })
 }

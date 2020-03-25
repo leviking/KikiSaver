@@ -37,6 +37,7 @@
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((position) => {
                     gps.value = `${position.coords.latitude}, ${position.coords.longitude}`;
+                    console.log(gps.value)
                 });
             }
         };
