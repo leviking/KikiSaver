@@ -9,6 +9,7 @@ body {
 
 h1 {
     color: #48A2B3;
+
 }
 
 input {
@@ -30,6 +31,17 @@ input[type=file] {
     align-content: center;
     width: 75vw;
 }
+#banner, #one {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+}
+
+#logo{
+    margin: 0px auto;
+    
+}
+
 
 #selfie-jpeg{
     height: 25vh;
