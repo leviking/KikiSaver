@@ -1,6 +1,6 @@
 const express = require('express')
 const db = require('./api/db')
-const { login, sendLogin } = require('./api/login')
+const { login, sendLogin, sendAdmin } = require('./api/login')
 const { sendSignup, createUser } = require('./api/sign-up')
 const app = express()
 const port = 3000
@@ -22,29 +22,6 @@ app.get('/signup', sendSignup)
 app.post('/signup', createUser)
 
 //Admin stuff
-
-
-const sendAdmin = (req, res) => {
-
-    if (isAdmin) {
-        res.sendFile(__dirname + '/public/admin.html')
-    } else {
-        res.redirect('/')
-    }
-}
-
-const isAdmin = async(user_id) => {
-    let result
-    await con.query(`select id from users where is_admin and id='${user_id}'`, (error, results, fields) => {
-        if (error) {
-            console.log(error)
-        } else {
-            result = results[0].id
-        }
-    })
-    return result
-}
-
 app.get('/admin', sendAdmin)
 
 //logout stuff
