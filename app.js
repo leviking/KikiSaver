@@ -6,12 +6,9 @@ const app = express()
 const port = 3000
 
 app.use(express.static('public'))
+app.use(express.static('src'))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// Splash stuff
-app.get('/', (req, res) => res.sendFile(__dirname + '/public/index.html'));
-app.get('/src/css/style.css', (req, res) => { res.sendFile(__dirname + '/src/css/style.css') })
 
 // Login
 app.get('/login', sendLogin)

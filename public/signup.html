@@ -1,46 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>KikiSaver Signup</title>
-    <link rel="stylesheet" href="../src/css/style.css">
-  </head>
-  <body>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
     <main id="container">
-      <h1>Sign Up</h1>
-      <form action="/signup" method="post" id="signup">
-          <div class="col">
-              <label for="username">Username:</label>
-              <input type="email" name="username" id="username" placeholder="Enter your email" required>
-          </div>
-          <div class="col">
-              <label for="password">Password:</label>
-              <input type="password" name="password" id="password" placeholder="Enter your password" required>
-          </div>
-          <div class="col">
-              <label for="verifyPassword">Password Confirmation:</label>
-              <input type="password" name="verifyPassword" id="verify-password" placeholder="Confirm your password" required>
-          </div>
-          <div class="col">
-              <label for="firstName">First Name:</label>
-              <input type="text" name="firstName" id="first-name" placeholder="Enter your first name" required>
-          </div>
-          <div class="col">
-              <label for="lastName">Last Name:</label>
-              <input type="text" name="lastName" id="last-name" placeholder="Enter your last name" required>
-          </div>
-          <div class="col">
-              <label for="phone">Phone:</label>
-              <input type="tel" name="phone" id="phone" placeholder="Enter a your phone number without hyphens" required>
-          </div>
-          <div>
-              <input type="submit" value="Submit" class="btn">
-          </div>
-      </form>
-      <p>Already have an account?</p>
-      <a href="/login"><button class="btn">Sign in!</button></a>
+        <h1>Sign Up</h1>
+        <form action="/signup" method="post" id="signup">
+            <div class="col">
+                <label for="username">Username:</label>
+                <input type="email" name="username" id="username" placeholder="Enter your email" required>
+            </div>
+            <div class="col">
+                <label for="password">Password:</label>
+                <input type="password" name="password" id="password" placeholder="Enter your password" required>
+            </div>
+            <div class="col">
+                <label for="verifyPassword">Password Confirmation:</label>
+                <input type="password" name="verifyPassword" id="verify-password" placeholder="Confirm your password" required>
+            </div>
+            <div class="col">
+                <label for="firstName">First Name:</label>
+                <input type="text" name="firstName" id="first-name" placeholder="Enter your first name" required>
+            </div>
+            <div class="col">
+                <label for="lastName">Last Name:</label>
+                <input type="text" name="lastName" id="last-name" placeholder="Enter your last name" required>
+            </div>
+            <div class="col">
+                <label for="phone">Phone:</label>
+                <input type="tel" name="phone" id="phone" placeholder="Enter a your phone number without hyphens" required>
+            </div>
+            <div>
+                <input type="submit" value="Submit" class="btn">
+            </div>
+        </form>
+        <p>Already have an account?</p>
+        <a href="/login"><button class="btn">Sign in!</button></a>
     </main>
-  </body>
+</body>
+
 </html>
