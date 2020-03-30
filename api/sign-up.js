@@ -20,5 +20,4 @@ const createUser = (req, res) => {
         }
     })
 }
-
-module.exports = { sendSignup, createUser }
+module.exports = { sendSignup, createUser } 

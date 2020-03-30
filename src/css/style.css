@@ -9,7 +9,8 @@ body {
 
 h1 {
     color: #48A2B3;
-
+    text-align: center;
+    font-size: 3em;
 }
 
 input {
@@ -28,7 +29,7 @@ input[type=file] {
     margin: 0px auto;
     display: flex;
     flex-direction: column;
-    align-content: center;
+    align-items: center;
     width: 75vw;
 }
 #banner, #one {
@@ -37,11 +38,13 @@ input[type=file] {
     align-items: center; 
 }
 
-#logo{
-    margin: 0px auto;
-    
+#login {
+    width: minmax(300px, 0px)
 }
 
+#logo{
+    margin: 0px auto;
+}
 
 #selfie-jpeg{
     height: 25vh;
@@ -87,22 +90,38 @@ input[type=file] {
         text-decoration: none;
     }
 
+    .login-button {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        justify-content: space-around;
+        align-items: center;
+    }
+
 
 .btn {
     width: 250px;
     background: #48A2B3;
     padding: 3px;
-    margin: 10px;
+    margin: 5px;
     color: white;
     font: inherit;
     font-family: 'Fira Code', 'Courier New', Courier, monospace;
     text-decoration: none;
+    border-radius: 3px;
+    align-self: center;
 }
 
 .col {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    width: 250px
 }
+
+    .col label, input {
+        width: 250px;
+    }
 
 .not-found {
     height: 75vh;
