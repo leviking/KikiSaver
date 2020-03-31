@@ -4,7 +4,8 @@
   "description": "MS Coding Academy Attendance App",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app",
+    "dev": "nodemon app"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,10 @@
   "homepage": "https://github.com/leviking/KikiSaver#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "express-fileupload": "^1.1.6",
     "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
   }
 }
