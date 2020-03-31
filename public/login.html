@@ -12,7 +12,7 @@
 <body>
     <main id="container">
         <h1>Login</h1>
-        <form action="/login" method="post" id="login">
+        <form action="/login" method="post" id="login" class="col" encType="multipart/form-data">
             <div class="col">
                 <label for="username">Username:</label>
                 <input type="email" name="username" placeholder="Enter your email" required>
@@ -25,13 +25,15 @@
                 <label for="image">Selfie:</label>
                 <input type="file" name="selfie" id="selfie" accept="image/png image/jpeg" class="btn" required>
             </div>
-            <div>
+            <div class="buttons">
                 <input type="hidden" name="gps">
                 <input type="submit" value="Submit" class="btn">
             </div>
         </form>
-        <p>Don't have an account?</p>
-        <a href="/signup"><button class="btn">Sign up!</button></a>
+        <section class="login-button">
+            <p>Don't have an account?</p>
+            <a href="/signup"><button class="btn">Sign up!</button></a>
+        </section>
     </main>
     <script>
         window.onload = (event) => {
