@@ -85,6 +85,7 @@ loginEmitter.on('onAdmin', (req, res) => {
 loginEmitter.on('saveSelfie', writeSelfie)
 loginEmitter.on('selfieWrite', updateSelfieUrl)
 loginEmitter.on('loginSuccess', (res) => {
-    res.sendFile(path.join(__dirname, '/../public/success.html'))
+    res.status(200).send('Ok');
+    //res.sendFile(path.join(__dirname, '/../public/success.html'))
 })
 module.exports = { login, sendLogin, sendAdmin }
