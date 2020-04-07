@@ -27,13 +27,13 @@ const writeSelfie = (user, selfie) => {
     console.log(user);
     console.log(selfie)
     fs.writeFile(selfiePath, selfie.data, selfieErrorHandler)
-    loginEmitter.emit('selfieWrite', user, selfiePath )
+    loginEmitter.emit('selfieWrite', user, selfiePath)
 }
 
 const updateSelfieUrl = (user, selfiePath) => {
-    con.query(getSelfieUpdateQuery(user,selfiePath), selfieErrorHandler)
-    con.query(`select * from attendance where user_id='${user.id}' order by created_at desc limit 1`,(err,res,f) => {
-        if(err) console.log(err)
+    con.query(getSelfieUpdateQuery(user, selfiePath), selfieErrorHandler)
+    con.query(`select * from attendance where user_id='${user.id}' order by created_at desc limit 1`, (err, res, f) => {
+        if (err) console.log(err)
         console.log(res[0])
     })
 }
@@ -57,30 +57,31 @@ const login = (req, res) => {
             res.send('no results')
         } else {
             (results[0].is_admin == true) ?
-            loginEmitter.emit('onAdmin', req, res):
-            loginEmitter.emit('onLogin', results[0], req.ip, req.body.gps, req.files.selfie, res);
+            loginEmitter.emit('onAdmin', req, res, req.body.username, req.body.password):
+                loginEmitter.emit('onLogin', results[0].id, req.ip, req.body.gps, res);
         }
     })
 }
 
 const sendAdmin = (req, res) => {
-    if (con.query(getAdminQuery(req.headers.msuser, req.headers.mspass), (err, results, fields) => {
+    const b64auth = (req.headers.authorization || '').split(' ')[1] || '';
+    const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':');
+    if (con.query(getAdminQuery(login, password), (err, results, fields) => {
             if (err) console.log(err)
             if (!results.length || results[0].is_admin == false) {
                 console.log({ results: results, status: 'not admin' });
                 res.status(401).send('Not admin')
                 return
             }
-            res.redirect('/admin')
             res.sendFile(path.join(__dirname + '/../public/admin.html'))
         }))
         return
 }
 
 loginEmitter.on('onLogin', logAttendance)
-loginEmitter.on('onAdmin', (req, res) => {
-    //add auth
-    res.set({ msuser: req.body.username, mspass: req.body.password }).sendFile(path.join(__dirname, '/../public/admin.html'))
+loginEmitter.on('onAdmin', (req, res, userName, password) => {
+    const encodedCreds = Buffer.from(`${userName}:${password}`).toString('base64')
+    res.set('Authorization', `Basic ${encodedCreds}`).sendFile(path.join(__dirname + '/../public/admin.html'));
 })
 loginEmitter.on('saveSelfie', writeSelfie)
 loginEmitter.on('selfieWrite', updateSelfieUrl)
