@@ -4,7 +4,7 @@ const fileUpload = require('express-fileupload')
 const { login, sendLogin, sendAdmin } = require('./api/login')
 const { sendSignup, createUser } = require('./api/sign-up')
 const app = express()
-const port = 3001
+const port = 3000
 const cors = require('cors')
 
 app.use(cors())

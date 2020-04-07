@@ -6,7 +6,8 @@ const sendSignup = (req, res) => res.sendFile(path.join(__dirname + '/../public/
 const getSignupQuery = (username, password, firstName, lastName, phone) => `insert into users(username, password, first_name, last_name, phone, created_at) values ('${username}', '${password}','${firstName}', '${lastName}','${phone}', now())`
 
 const createUserDir = (username) => {
-    fs.mkdir(path.join(__dirname + `/../public/selfies/${username}`), {recursive: true}, (err) => console.log('ok'))}
+    fs.mkdir(path.join(__dirname + `/../public/selfies/${username}`), { recursive: true }, (err) => console.log('ok'))
+}
 
 const createUser = (req, res) => {
     con.query(getSignupQuery(req.body.username, req.body.password, req.body.firstName, req.body.lastName, req.body.phone), function(error, results, fields) {
@@ -16,8 +17,9 @@ const createUser = (req, res) => {
         };
         if (results) {
             createUserDir(req.body.username)
-            res.redirect('/');
+                //res.redirect('/');
+            res.status(200).send('Ok');
         }
     })
 }
-module.exports = { sendSignup, createUser } 
+module.exports = { sendSignup, createUser }
