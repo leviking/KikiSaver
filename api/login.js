@@ -68,7 +68,7 @@ const login = (req, res) => {
             console.log(err)
         } else if (!results.length) {
             // username and password do not match!
-            res.send('no results')
+            res.send(401, 'Password incorrect')
         } else {
             (results[0].is_admin == true) ?
             loginEmitter.emit('onAdmin', req, res):
