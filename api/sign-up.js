@@ -10,6 +10,7 @@ const createUserDir = (username) => {
 }
 
 const createUser = (req, res) => {
+    console.log(req)
     con.query(getSignupQuery(req.body.username, req.body.password, req.body.firstName, req.body.lastName, req.body.phone), function(error, results, fields) {
         if (error) {
             res.status(400).send(`${JSON.stringify(error)}.`);
