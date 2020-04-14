@@ -6,6 +6,10 @@ const { sendSignup, createUser } = require('./api/sign-up')
 const app = express()
 const port = 3000
 const cors = require('cors')
+const sgMail = require('@sendgrid/mail');
+
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 app.use(cors())
 
@@ -35,6 +39,21 @@ app.get('/logout', sendIndex)
 app.get('/ping', (req, res) => {
   res.send("pong")
 })
+
+//email
+app.post('/reset', (req, res) => {
+  console.log(req.body)
+  const msg = {
+    to: req.body.email,
+    from: 'kiki@mscode.dev',
+    subject: 'Password Reset',
+    text: 'Here is your password reset link: [link]',
+    html: '<p>Here is your password reset link: [link]</p>',
+  };
+  sgMail.send(msg);
+  res.status(200).send('ok')
+})
+
 
 // 404 Not found stuff
 app.get('*', (req, res) => res.status(404).sendFile(path.join(__dirname, 'public', '404.html')))
