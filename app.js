@@ -3,6 +3,7 @@ const path = require('path')
 const fileUpload = require('express-fileupload')
 const { login, sendLogin, sendAdmin } = require('./api/login')
 const { sendSignup, createUser } = require('./api/sign-up')
+const { getAttendanceRecords } = require('./api/attendance')
 const app = express()
 const port = 3000
 const cors = require('cors')
@@ -53,6 +54,9 @@ app.post('/reset', (req, res) => {
   sgMail.send(msg);
   res.status(200).send('ok')
 })
+
+//attendance records
+app.post('/attendance', getAttendanceRecords)
 
 
 // 404 Not found stuff
