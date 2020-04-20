@@ -19,12 +19,26 @@ const getAdminQuery = (username, password) => {
 
 const getSelfieUpdateQuery = (user, selfiePath) => `update attendance set selfie_url='${selfiePath}' where user_id='${user.id}' order by created_at desc limit 1`
 
+const getFileExtension = (mimetype) => {
+    if (mimetype === 'image/png') {
+        return '.png'
+    } else if (mimetype === 'image/jpg'){
+        return '.jpg'
+    } else if (mimetype === 'image/jpeg') {
+        return '.jpeg'
+    } else {
+        console.log('Wrong file type!!')
+        return ''
+    }
+}
 
 const selfieErrorHandler = (err) => console.log(err)
 const writeSelfie = (user, selfie) => {
     const timeCode = Date.now()
-    const selfiePath = path.join(__dirname + `/../public/selfies/${user.username}/${timeCode}`)
-    console.log(user);
+    const selfiePath = path.join(
+        __dirname + 
+        `/../public/selfies/${user.username}/${timeCode}${getFileExtension(selfie.mimetype)}`
+        )
     console.log(selfie)
     fs.writeFile(selfiePath, selfie.data, selfieErrorHandler)
     loginEmitter.emit('selfieWrite', user, selfiePath )
