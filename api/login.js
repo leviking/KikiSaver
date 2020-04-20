@@ -8,7 +8,7 @@ const loginEmitter = new EventEmitter();
 const sendLogin = (req, res) => res.sendFile(path.join(__dirname, '/../public/login.html'))
 
 const getLoginQuery = (username, password) => {
-    return `SELECT id, is_admin, username FROM users WHERE username='${username}' AND password='${password}'`
+    return `SELECT id, is_admin, username, first_name FROM users WHERE username='${username}' AND password='${password}'`
 }
 const getAttendanceQuery = (id, ip, gps) => {
     return `insert into attendance (user_id, created_at, gps, ip) values ('${id}', now(), '${gps}', '${ip}')`
@@ -42,7 +42,9 @@ const writeSelfie = (user, selfie) => {
     console.log(selfie)
     fs.writeFile(selfiePath, selfie.data, selfieErrorHandler)
     loginEmitter.emit('selfieWrite', user, selfiePath )
+    loginEmitter.emit('selfieURL',selfiePath)
 }
+
 
 const updateSelfieUrl = (user, selfiePath) => {
     con.query(getSelfieUpdateQuery(user,selfiePath), selfieErrorHandler)
@@ -52,15 +54,17 @@ const updateSelfieUrl = (user, selfiePath) => {
     })
 }
 
-const logAttendance = (user, ip, gps, selfie, res) => {
+const logAttendance = (user, username, ip, gps, selfie, res) => {
     con.query(getAttendanceQuery(user.id, ip, gps), (err, results, fields) => {
         if (err) {
             console.log(err)
         } else {
-            loginEmitter.emit('loginSuccess', res)
-            loginEmitter.emit('saveSelfie', user, selfie)
+            loginEmitter.emit('saveSelfie', user, selfie);loginEmitter.on('selfieURL', selfiePath=>{
+                loginEmitter.emit('loginSuccess', res, username, selfiePath)
+            });
+
         }
-    })
+    });
 }
 const login = (req, res) => {
     con.query(getLoginQuery(req.body.username, req.body.password), (err, results, fields) => {
@@ -72,7 +76,7 @@ const login = (req, res) => {
         } else {
             (results[0].is_admin == true) ?
             loginEmitter.emit('onAdmin', req, res):
-            loginEmitter.emit('onLogin', results[0], req.ip, req.body.gps, req.files.selfie, res);
+            loginEmitter.emit('onLogin', results[0], results['first_name'], req.ip, req.body.gps, req.files.selfie, res);
         }
     })
 }
@@ -98,8 +102,8 @@ loginEmitter.on('onAdmin', (req, res) => {
 })
 loginEmitter.on('saveSelfie', writeSelfie)
 loginEmitter.on('selfieWrite', updateSelfieUrl)
-loginEmitter.on('loginSuccess', (res) => {
-    res.status(200).send('Ok');
+loginEmitter.on('loginSuccess', (res, username, selfiePath) => {
+    res.status(200).send(JSON.stringify({username: username, selfiePath: selfiePath}));
     //res.sendFile(path.join(__dirname, '/../public/success.html'))
 })
 module.exports = { login, sendLogin, sendAdmin }
