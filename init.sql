@@ -31,3 +31,13 @@ create table attendance(
     constraint id primary key (id),
     constraint foreign key(user_id) references users(id)
 );
+
+create table user_resets(
+    id int auto_increment,
+    user_id int,
+    created_at datetime,
+    deleted_at datetime,
+    reset_key varchar(256),
+    constraint id primary key (id),
+    constraint foreign key(user_id) references users(id)
+)
