@@ -8,6 +8,7 @@ const app = express()
 const port = 3000
 const cors = require('cors')
 const sgMail = require('@sendgrid/mail');
+const {sendMail} = require('./api/reset')
 
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -42,18 +43,7 @@ app.get('/ping', (req, res) => {
 })
 
 //email
-app.post('/reset', (req, res) => {
-  console.log(req.body)
-  const msg = {
-    to: req.body.email,
-    from: 'kiki@mscode.dev',
-    subject: 'Password Reset',
-    text: 'Here is your password reset link: [link]',
-    html: '<p>Here is your password reset link: [link]</p>',
-  };
-  sgMail.send(msg);
-  res.status(200).send('ok')
-})
+app.post('/reset', sendMail)
 
 //attendance records
 app.post('/attendance', getAttendanceRecords)
