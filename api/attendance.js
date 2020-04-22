@@ -8,7 +8,7 @@ const getAttendanceRecords = (req, res) => {
   con.query(`SELECT created_at, selfie_url FROM attendance WHERE user_id=${req.body.user}`,
     (err, results, fields) => {
       if (err) {
-        res.status(400).send(`${JSON.stringify(error)}.`);
+        res.status(400).send(`${JSON.stringify(err)}.`);
         return;
       } 
       res.send(JSON.stringify(results))
