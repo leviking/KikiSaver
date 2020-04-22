@@ -17,7 +17,7 @@ const sendMail = (req, res) => {
 
     } else if (results) {
       console.log(results[1][0].reset_key);
-      const link = `http://localhost:3001/reset/${results[1][0].reset_key}`;
+      const link = `http://localhost:3001/changePass/${results[1][0].reset_key}`;
       const msg = {
         to: req.body.email,
         from: 'kiki@mscode.dev',
