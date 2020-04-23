@@ -49,6 +49,9 @@ app.post('/reset', sendMail)
 //reset password
 app.get('/user/magic/:id', fetchUser)
 
+//change password
+app.post('/changePass', changePassword)
+
 //attendance records
 app.post('/attendance', getAttendanceRecords)
 

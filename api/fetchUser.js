@@ -10,6 +10,7 @@ const fetchUser = (req, res) => {
             res.status(400).send('err')
         } else if (results) {
             console.log(results[0]);
+
         }
     })
 }
@@ -21,5 +22,4 @@ const resetKeyQuery = resetKey => {
     return `UPDATE user_resets SET deleted_at = now() WHERE reset_key = '${resetKey}'`;
 }
 
-resetEmitter.on('successfulReset', resetKey)
 module.exports = { fetchUser }
