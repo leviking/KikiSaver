@@ -5,6 +5,7 @@ const { login, sendLogin, sendAdmin } = require('./api/login')
 const { sendSignup, createUser } = require('./api/sign-up')
 const { getAttendanceRecords } = require('./api/attendance')
 const { fetchUser } = require('./api/fetchUser')
+const { changePassword } = require('./api/changePassword')
 const app = express()
 const port = 3000
 const cors = require('cors')
@@ -48,6 +49,9 @@ app.post('/reset', sendMail)
 
 //reset password
 app.get('/user/magic/:id', fetchUser)
+
+//change password
+app.post('/changePass', changePassword)
 
 //attendance records
 app.post('/attendance', getAttendanceRecords)
