@@ -20,10 +20,19 @@ const changePassword = (req, res) => {
                 console.log(results)
             }
         })
+
     } else {
-        console.log('i died')
-        return
-        //con.query(noMagicLinkQuery(req.body.newPassword, req.body.userId))
+
+        con.query(noMagicLinkQuery(req.body.newPassword, req.body.username), (err, results, fields) => {
+            if (err) {
+                console.log(err)
+                res.status(400).send('err')
+            } else {
+                console.log(results)
+                res.status(200).send('ok')
+            }
+        })
+
      }
 }
 
@@ -32,8 +41,8 @@ const magicLinkQuery = (password, magicLink) => {
         SELECT user_id FROM user_resets WHERE reset_key = '${magicLink}' AND deleted_at IS null
         )`
 }
-const noMagicLinkQuery = (password, userId) => {
-    return `UPDATE users SET password = '${password}' WHERE id = '${userId}'`
+const noMagicLinkQuery = (password, username) => {
+    return `UPDATE users SET password = '${password}' WHERE username = '${username}'`
 }
 const destroyMagicQuery = resetLink => {
     return `UPDATE user_resets SET deleted_at = now() WHERE reset_key = '${resetLink}'`
