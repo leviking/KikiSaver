@@ -4,6 +4,7 @@ const fileUpload = require('express-fileupload')
 const { login, sendLogin, sendAdmin } = require('./api/login')
 const { sendSignup, createUser } = require('./api/sign-up')
 const { getAttendanceRecords } = require('./api/attendance')
+const { fetchUser } = require('./api/fetchUser')
 const app = express()
 const port = 3000
 const cors = require('cors')
@@ -44,6 +45,9 @@ app.get('/ping', (req, res) => {
 
 //email
 app.post('/reset', sendMail)
+
+//reset password
+app.get('/user/magic/:id', fetchUser)
 
 //attendance records
 app.post('/attendance', getAttendanceRecords)
