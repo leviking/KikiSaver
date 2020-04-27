@@ -1,6 +1,5 @@
 node_modules
 .env
 .DS_Store
-selfies
+selfiessendgrid.env
 sendgrid.env
-public/selfies
