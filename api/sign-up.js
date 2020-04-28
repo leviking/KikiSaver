@@ -1,17 +1,26 @@
+const { encrypt } = require('./encrypt')
 const fs = require('fs')
 const path = require('path')
 const { con } = require('./db')
     //Sign up stuff
 const sendSignup = (req, res) => res.sendFile(path.join(__dirname + '/../public/signup.html'))
 const getSignupQuery = (username, password, firstName, lastName, phone) => `insert into users(username, password, first_name, last_name, phone, created_at) values ('${username}', '${password}','${firstName}', '${lastName}','${phone}', now())`
+const EventEmitter = require('events');
+const signupEmitter = new EventEmitter()
 
 const createUserDir = (username) => {
     fs.mkdir(path.join(__dirname + `/../public/selfies/${username}`), { recursive: true }, (err) => console.log('ok'))
 }
 
 const createUser = (req, res) => {
-    console.log(req.body)
-    con.query(getSignupQuery(req.body.username, req.body.password, req.body.firstName, req.body.lastName, req.body.phone), function(error, results, fields) {
+    // console.log(req.body)
+    // let buff = new Buffer(req.body.password, 'base64');
+    // console.log(buff.toString('ascii'))
+    // let password = encrypt(Buffer.from(req.body.password, 'base64').toString());
+    encrypt(Buffer.from(req.body.password, 'base64').toString(), signupEmitter)
+    console.log('createUser ', password);
+    
+    con.query(getSignupQuery(req.body.username, password, req.body.firstName, req.body.lastName, req.body.phone), function(error, results, fields) {
         if (error) {
             res.status(400).send(`${JSON.stringify(error)}.`);
             return;
@@ -23,4 +32,5 @@ const createUser = (req, res) => {
         }
     })
 }
+signupEmitter.on('encrypted', (hash)=>console.log(hash))
 module.exports = { sendSignup, createUser }
