@@ -13,13 +13,13 @@ const createUserDir = (username) => {
 }
 
 const createUser = (req, res) => {
-    // console.log(req.body)
-    // let buff = new Buffer(req.body.password, 'base64');
-    // console.log(buff.toString('ascii'))
-    // let password = encrypt(Buffer.from(req.body.password, 'base64').toString());
-    encrypt(Buffer.from(req.body.password, 'base64').toString(), signupEmitter)
-    console.log('createUser ', password);
-    
+    encrypt(
+        Buffer.from(req.body.password, 'base64').toString(), 
+        createUserWithPassword(res,req)
+    )
+}
+
+const createUserWithPassword = (res, req) => (password) => {
     con.query(getSignupQuery(req.body.username, password, req.body.firstName, req.body.lastName, req.body.phone), function(error, results, fields) {
         if (error) {
             res.status(400).send(`${JSON.stringify(error)}.`);
@@ -32,5 +32,6 @@ const createUser = (req, res) => {
         }
     })
 }
-signupEmitter.on('encrypted', (hash)=>console.log(hash))
+
+// signupEmitter.on('encrypted', )
 module.exports = { sendSignup, createUser }
