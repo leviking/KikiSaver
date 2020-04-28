@@ -1,7 +1,9 @@
 const path = require('path')
 const fs = require('fs')
 const { con } = require('./db')
+const { encrypt } = require('./encrypt')
 const EventEmitter = require('events');
+const bcrypt = require('bcrypt');
 const loginEmitter = new EventEmitter();
 
 //Login stuff
@@ -62,8 +64,11 @@ const logAttendance = (user, ip, gps, selfie, req, res) => {
         }
     })
 }
-const login = (req, res) => {
-    con.query(getLoginQuery(req.body.username, req.body.password), (err, results, fields) => {
+const login = async (req, res) => { 
+    let buff = new Buffer(req.body.password, 'base64');
+    let password = await encrypt(buff.toString('ascii'));
+
+    con.query(getLoginQuery(req.body.username, password), (err, results, fields) => {
         if (err) {
             console.log(err)
         } else if (!results.length) {
@@ -99,4 +104,5 @@ loginEmitter.on('selfieWrite', updateSelfieUrl)
 loginEmitter.on('loginSuccess', (req, res, selfiePath, username) => {
     res.status(200).send(JSON.stringify({ username: username, selfiePath: selfiePath }));
 })
+loginEmitter.on('encrypted', (hash)=>console.log(hash))
 module.exports = { login, sendLogin, sendAdmin }
