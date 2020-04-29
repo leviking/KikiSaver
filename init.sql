@@ -9,7 +9,7 @@ use kiki_saver;
 create table users (
     id int auto_increment,
     username varchar(50),
-    password varchar(20),
+    password varchar(74),
     first_name varchar(20),
     last_name varchar(30),
     phone varchar(10),
