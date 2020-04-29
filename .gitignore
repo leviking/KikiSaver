@@ -4,3 +4,7 @@ node_modules
 selfies
 sendgrid.env
 public/selfies
+sendgridenv
+.sendgridenv
+.sendgrid.env
+.envsendgrid
