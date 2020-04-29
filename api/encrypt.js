@@ -10,4 +10,9 @@ const encrypt = (password, callback) => {
   });
 }
 
-module.exports = { encrypt }
+const compare = (password, hash, callback) => bcrypt.compare(password, hash, (err, result) => {
+  if(err) console.log(err)
+  callback(result)
+})
+
+module.exports = { encrypt, compare }

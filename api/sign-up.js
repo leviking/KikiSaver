@@ -13,6 +13,8 @@ const createUserDir = (username) => {
 }
 
 const createUser = (req, res) => {
+    console.log(`signup: ${req.body.password}: `, Buffer.from(req.body.password, 'base64').toString())
+    
     encrypt(
         Buffer.from(req.body.password, 'base64').toString(), 
         createUserWithPassword(res,req)

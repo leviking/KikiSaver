@@ -1,14 +1,14 @@
 const path = require('path')
 const fs = require('fs')
 const { con } = require('./db')
-const { encrypt } = require('./encrypt')
+const { encrypt,compare } = require('./encrypt')
 const EventEmitter = require('events');
-const bcrypt = require('bcrypt');
 const loginEmitter = new EventEmitter();
 
+//ErrorHandler
 //Login stuff
 const sendLogin = (req, res) => res.sendFile(path.join(__dirname, '/../public/login.html'))
-
+const getPasswordQuery = (username) => `select password from users where username='${username}';`
 const getLoginQuery = (username, password) => {
     return `SELECT id, is_admin, username, first_name FROM users WHERE username='${username}' AND password='${password}'`
 }
@@ -64,12 +64,58 @@ const logAttendance = (user, ip, gps, selfie, req, res) => {
         }
     })
 }
-const login = async (req, res) => { 
-    encrypt(
-        Buffer.from(req.body.password, 'base64').toString(),
-        loginWithPassword(req,res)
-    );
+
+const getPassword = (username, callback) => {
+    con.query(`select password from users where username='${username}'`,
+        (err, results) => {
+            if(err) {console.log(err)
+            }else{
+                callback(results[0].password)
+            }
+        }
+    )
 }
+
+const getUser = (username, callback) => {
+    con.query(`select * from users where username='${username}'`,
+    (err, results) => {
+        if(err) {
+            console.log(err)
+        } else {
+            callback(results[0])
+        }
+    }
+    )
+}
+
+const login = async (req, res) => {
+    const compareWithPass = (loginPass, callback) => (dbPass) => {
+        compare(loginPass, dbPass, callback)
+    }
+    const decodedLoginPass =  Buffer.from(req.body.password, 'base64').toString()
+    const loginAttendance = (ip, gps, selfie, res, req) => (user) => loginEmitter.emit('onLogin', user, ip, gps, selfie, res, req)
+
+    const handleLogin = (results) => {
+        results ?
+        getUser(req.body.username, loginAttendance(req.ip, req.body.gps, req.files.selfie, req, res)) :
+        res.send(401, 'Password incorrect')
+    }
+
+    getPassword(req.body.username, compareWithPass(decodedLoginPass, handleLogin))
+}
+        
+    //     compare(
+    //     Buffer.from(req.body.password, 'base64').toString(),
+    //     dbPass,
+    //     (result)=>{`seems like it worked ${result}`}
+    // )
+    
+    // encrypt(
+    //     Buffer.from(req.body.password, 'base64').toString(),
+    //     loginWithPassword(req,res)
+    // );
+// }
+
 
 const loginWithPassword = (req,res) => (password) => {
     con.query(getLoginQuery(req.body.username, password), (err, results, fields) => {
