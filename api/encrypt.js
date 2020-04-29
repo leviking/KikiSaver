@@ -5,12 +5,12 @@ const EventEmitter = require('events');
 const encrypt = (password, callback) => { 
   bcrypt.hash(password, saltRounds, function(err, hash) {
     if(err) console.log(err);
-    console.log(hash)    
+    console.log(hash)
     callback(hash)
   });
 }
 
-const compare = (password, hash, callback) => bcrypt.compare(password, hash, (err, result) => {
+const compare = (password, hash, callback) => bcrypt.compare(password, hash, (err, result) => {  
   if(err) console.log(err)
   callback(result)
 })

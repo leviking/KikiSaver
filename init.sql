@@ -25,7 +25,7 @@ create table attendance(
     user_id int,
     created_at datetime,
     deleted_at datetime,
-    gps varchar(20),
+    gps varchar(80),
     selfie_url varchar(240),
     ip varchar(40),
     constraint id primary key (id),
