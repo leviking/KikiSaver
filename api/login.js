@@ -65,9 +65,13 @@ const logAttendance = (user, ip, gps, selfie, req, res) => {
     })
 }
 const login = async (req, res) => { 
-    let buff = new Buffer(req.body.password, 'base64');
-    let password = await encrypt(buff.toString('ascii'));
+    encrypt(
+        Buffer.from(req.body.password, 'base64').toString(),
+        loginWithPassword(req,res)
+    );
+}
 
+const loginWithPassword = (req,res) => (password) => {
     con.query(getLoginQuery(req.body.username, password), (err, results, fields) => {
         if (err) {
             console.log(err)
