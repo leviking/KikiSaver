@@ -30,7 +30,7 @@ const logAttendance = (user, ip, gps, selfie, req, res) => {
 
 const getPassword = (username, callback) => {
     con.query(`select password from users where username='${username}'`,
-        (err, results) => {
+        (err, results) => {            
             if(err) {console.log(err)
             }else{
                 callback(results[0].password)
@@ -52,7 +52,7 @@ const getUser = (username, callback) => {
 }
 
 const login = async (req, res) => {
-    const compareWithPass = (loginPass, callback) => (dbPass) => {
+    const compareWithPass = (loginPass, callback) => (dbPass) => {        
         compare(loginPass, dbPass, callback)
     }
     const decodedLoginPass =  Buffer.from(req.body.password, 'base64').toString()
@@ -61,9 +61,9 @@ const login = async (req, res) => {
     const handleLogin = (results) => {
         results ?
         getUser(req.body.username, loginAttendance(req.ip, req.body.gps, req.files.selfie, req, res)) :
-        res.send(401, 'Password incorrect')
+        res.status(401).send('Password incorrect')
     }
-
+    
     getPassword(req.body.username, compareWithPass(decodedLoginPass, handleLogin))
 }
 

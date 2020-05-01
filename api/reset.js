@@ -25,7 +25,8 @@ const sendMail = (req, res) => {
         text: `Here is your password reset link: ${link}`,
         html: `<p>Here is your password reset link: ${link}</p>`,
       };
-      sgMail.send(msg);
+      //sgMail.send(msg);
+      console.log(`http://localhost:3001/changePass/${results[1][0].reset_key}`)
       res.status(200).send('Ok')
     }
     

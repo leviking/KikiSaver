@@ -5,6 +5,8 @@ const { login, sendLogin, sendAdmin } = require('./api/login')
 const { sendSignup, createUser } = require('./api/sign-up')
 const { getAttendanceRecords } = require('./api/attendance')
 const { fetchUser } = require('./api/fetchUser')
+const { changePassword } = require('./api/changePassword')
+
 const app = express()
 const port = 3000
 const cors = require('cors')
