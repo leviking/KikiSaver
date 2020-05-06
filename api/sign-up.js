@@ -24,7 +24,8 @@ const createUser = (req, res) => {
 const createUserWithPassword = (res, req) => (password) => {
     con.query(getSignupQuery(req.body.username, password, req.body.firstName, req.body.lastName, req.body.phone), function(error, results, fields) {
         if (error) {
-            res.status(400).send(`${JSON.stringify(error)}.`);
+            res.status(400).send('Duplicate Record!');
+            console.log(err)
             return;
         };
         if (results) {
