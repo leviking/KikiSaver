@@ -1,6 +1,7 @@
 const { con } = require('./db')
 const EventEmitter = require('events');
 const resetEmitter = new EventEmitter();
+const { encrypt, compare } = require('./encrypt')
 
 
 
@@ -23,17 +24,59 @@ const changePassword = (req, res) => {
         })
 
     } else {
-
-        con.query(noMagicLinkQuery(req.body.newPassword, req.body.username), (err, results, fields) => {
-            if (err) {
-                console.log(err)
-                res.status(400).send('err')
-            } else {
-                console.log(results)
-                res.status(200).send('ok')
+        const getPassword = (username, callback) => {
+            con.query(`select password from users where username='${username}'`,
+                (err, results) => {
+                    console.log(results[0].password);
+                    
+                    if(err) {console.log(err)
+                    }else{
+                        callback(results[0].password)
+                    }
+                }
+            )
+        }
+        
+        const getUser = (username, callback) => {
+            con.query(`select * from users where username='${username}'`,
+            (err, results) => {
+                if(err) {
+                    console.log(err)
+                } else {
+                    callback(results[0])
+                }
             }
-        })
+            )
+        }
 
+        const compareWithPass = (oldPassword, callback) => (dbPass) => {
+            console.log(dbPass);
+            
+            compare(oldPassword, dbPass, callback)
+        }
+        const decodedOldPass =  Buffer.from(req.body.oldPassword, 'base64').toString()
+        const updatePasswordWithNewPassword = (res, req) => (password) => {
+            con.query(noMagicLinkQuery(password, req.body.username), (error, results, fields) => {
+                if (error) {
+                    res.status(400).send(`${JSON.stringify(error)}.`);
+                    return;
+                };
+                if (results) {
+                        //res.redirect('/');
+                    res.status(200).send('Ok');
+                }
+            })
+        }
+        const handleChangePassword = (results) => {
+            results ?
+            getUser(req.body.username) :
+            res.status(401).send('Password incorrect')
+        }
+        getPassword(req.body.username, compareWithPass(decodedOldPass, handleChangePassword))
+        encrypt(
+            Buffer.from(req.body.newPassword, 'base64').toString(), 
+            updatePasswordWithNewPassword(res,req)
+        )
      }
 }
 
@@ -43,6 +86,7 @@ const magicLinkQuery = (password, magicLink) => {
         )`
 }
 const noMagicLinkQuery = (password, username) => {
+
     return `UPDATE users SET password = '${password}' WHERE username = '${username}'`
 }
 const destroyMagicQuery = resetLink => {
